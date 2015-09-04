@@ -31,7 +31,10 @@ size=38G features='0' hwhandler='0' wp=rw
   sufficent). 
 
 ## Undeletable Cinder Volumes
-- Suppose `cinder force-delete <volume_uuid>` returns 
+- Suppose `cinder force-delete <volume_uuid>` returns the following in volume.log 
+~~~
+ERROR cinder.volume.manager Cannot delete volume $uuid: volume is busy
+~~~
 - Map the volume to the block device (https://access.redhat.com/solutions/1579293)
 - Stop all IO to the block device:
 ~~~
