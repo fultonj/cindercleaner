@@ -2,9 +2,9 @@
 # Filename:                cindercleaner
 # Description:             cleans orphaned cinder volumes
 # Supported Langauge(s):   Bash 4.x, Python 2.7.y
-# Time-stamp:              <2015-09-06 15:32:33 jfulton> 
+# Time-stamp:              <2015-09-06 16:54:10 jfulton> 
 # See README.md at https://github.com/fultonj/cindercleaner
 # -------------------------------------------------------
 # This one-line wrapper just calls Red Hat SCL and Python virtenv 
-allparams=${@} /usr/bin/scl enable python27 '/home/cindercleaner/venv/cindercleaner/bin/python cindercleaner.py $allparams'
+allparams=${@} /usr/bin/scl enable python27 '/home/cindercleaner/venv/cindercleaner/bin/python /home/cindercleaner/cindercleaner/cindercleaner.py $allparams'
 
