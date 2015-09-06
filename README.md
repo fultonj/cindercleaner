@@ -53,23 +53,35 @@ ERROR cinder.volume.manager Cannot delete volume $uuid: volume is busy
 
 # How?
 
-## Python 
+## Installation
+
+### Create a user and location for the script to reside
+
+Create a dummy user to run this script so that you may add it to a
+crontab without tying it to a real person who might later leave your
+organization. 
+~~~
+sudo useradd cindercleander
+~~~
+We will use Python's virtenv to install an isolated Python in this
+user's home directory. 
+
+### Install an isolated Python with the necessary libraries
 
 In my case I'm working on RHEL6. Because RHSCL is available to anyone
 with RHEL-OSP (https://access.redhat.com/solutions/472793) I will use
 RHSCL to get newer version of Python without interfering with the one
 that came with the system. First install RHSCL (https://goo.gl/d4Ueyu)
 and then install python27. I will also install gcc to build what I
-install later with pip.
+install later with pip. You will also need to install git to get the
+cindercleaner script. 
 ~~~
 sudo subscription-manager repos --enable rhel-server-rhscl-6-rpms
-sudo yum -y install python27 gcc 
+sudo yum -y install python27 gcc git 
+sudo su - cindercleaner
 ~~~
-From there I will use scl and make an isolated Python environment with
-virtualenv. You might want to create a dummy user to run this script
-and then become that dummy user before doing the next steps. That way
-you won't tie the installation of this script to a particular person
-who might later leave your organization.
+From there I will become the utility user and use scl and make an
+isolated Python environment in that users with virtualenv. 
 ~~~
 scl enable python27 bash
 mkdir ~/venv
@@ -92,3 +104,30 @@ virtenv and pass the arguments along so that Python can deal with
 them. The resulting cindercleaner.py is then able to `import
 openstackclient` and `import hp3parclient`. 
 
+### Download and test the script
+
+Download
+~~~
+sudo su - cindercleaner
+git clone https://github.com/fultonj/cindercleaner.git
+~~~
+Run
+~~~
+/home/cindercleaner/cindercleaner/cindercleaner --help
+~~~
+The above looks redundant but can be explained as: 
+~~~
+/home/cindercleaner/cindercleaner/cindercleaner 
+      ^ home dir    ^ proj dir    ^ actual script
+~~~
+
+### Debug in interactive Python 
+
+If you want to interact directly with Python and the installed
+libraries then you may do the following. 
+~~~
+sudo su - cindercleaner
+scl enable python27 bash
+source venv/cindercleaner/bin/activate
+ipython
+~~~
