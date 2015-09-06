@@ -57,17 +57,19 @@ ERROR cinder.volume.manager Cannot delete volume $uuid: volume is busy
 
 In my case I'm working on RHEL6. Because RHSCL is available to anyone
 with RHEL-OSP (https://access.redhat.com/solutions/472793) I will use
-RHSCL to get newer versions of Python. First install SCL 
-(https://goo.gl/d4Ueyu) and then install python27. 
+RHSCL to get newer version of Python without interfering with the one
+that came with the system. First install RHSCL (https://goo.gl/d4Ueyu)
+and then install python27. I will also install gcc to build what I
+install later with pip.
 ~~~
 sudo subscription-manager repos --enable rhel-server-rhscl-6-rpms
-sudo yum -y install python27
+sudo yum -y install python27 gcc 
 ~~~
 From there I will use scl and make an isolated Python environment with
 virtualenv. You might want to create a dummy user to run this script
 and then become that dummy user before doing the next steps. That way
 you won't tie the installation of this script to a particular person
-who might later leave your organization. 
+who might later leave your organization.
 ~~~
 scl enable python27 bash
 mkdir ~/venv
@@ -75,4 +77,18 @@ virtualenv venv/cindercleaner --no-site-packages
 source venv/cindercleaner/bin/activate
 pip install pip --upgrade
 ~~~
+Next I will install my Python libraries.
+~~~
+pip install python-openstackclient
+pip install hp3parclient
+pip install ipython 
+~~~
+Note that ipython was optional.
+
+After doing the above I was able to create a shell wrapper (called
+cindercleaner) which calls scl to enable the python 2.7 installed 
+by SCL and then use that python to call the Python created by my
+virtenv and pass the arguments along so that Python can deal with
+them. The resulting cindercleaner.py is then able to `import
+openstackclient` and `import hp3parclient`. 
 
