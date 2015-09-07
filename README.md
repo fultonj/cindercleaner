@@ -85,12 +85,12 @@ In my case I'm working on RHEL6. Because RHSCL is available to anyone
 with RHEL-OSP (https://access.redhat.com/solutions/472793) I will use
 RHSCL to get newer version of Python without interfering with the one
 that came with the system. First install RHSCL (https://goo.gl/d4Ueyu)
-and then install python27. I will also install gcc to build what I
-install later with pip. You will also need to install git to get the
-cindercleaner script. 
+and then install python27. I will also install gcc and mysql-devel to
+build what I install later with pip. You will also need to install git
+to get the cindercleaner script. 
 ~~~
 sudo subscription-manager repos --enable rhel-server-rhscl-6-rpms
-sudo yum -y install python27 gcc git 
+sudo yum -y install python27 gcc mysql-devel git 
 sudo su - cindercleaner
 ~~~
 From there I will become the utility user and use scl and make an
@@ -106,6 +106,8 @@ Next I will install my Python libraries.
 ~~~
 pip install python-openstackclient
 pip install hp3parclient
+pip install MySQL-python
+pip install sqlalchemy
 pip install ipython 
 ~~~
 Note that ipython was optional.
