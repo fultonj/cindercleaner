@@ -57,14 +57,26 @@ ERROR cinder.volume.manager Cannot delete volume $uuid: volume is busy
 
 ### Create a user and location for the script to reside
 
-Create a dummy user to run this script so that you may add it to a
+Create a service user to run this script so that you may add it to a
 crontab without tying it to a real person who might later leave your
 organization. 
 ~~~
-sudo useradd cindercleander
+sudo useradd cindercleaner
 ~~~
-We will use Python's virtenv to install an isolated Python in this
-user's home directory. 
+This user will need to execute a few commands normally requiring root
+access like `multipath -ll` so next we run `sudo visudo` to add the
+following lines to `/etc/sudoers`. 
+~~~
+cindercleaner ALL= NOPASSWD: MULTIPATH
+Cmnd_Alias MULTIPATH=/sbin/multipath -ll
+~~~
+This user will also need read-access to some OpenStack configuration
+files which can be arranged with the following ACL commands. 
+~~~
+sudo setfacl -m u:cindercleaner:r /etc/cinder/cinder.conf
+~~~
+Next we will use Python's virtenv to install an isolated Python in
+this user's home directory. 
 
 ### Install an isolated Python with the necessary libraries
 
