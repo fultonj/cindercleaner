@@ -74,6 +74,7 @@ This user will also need read-access to some OpenStack configuration
 files which can be arranged with the following ACL commands. 
 ~~~
 sudo setfacl -m u:cindercleaner:r /etc/cinder/cinder.conf
+sudo setfacl -m u:cindercleaner:r /etc/nova/nova.conf
 ~~~
 Next we will use Python's virtenv to install an isolated Python in
 this user's home directory. 
